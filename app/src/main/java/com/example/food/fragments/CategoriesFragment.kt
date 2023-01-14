@@ -1,60 +1,99 @@
 package com.example.food.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.food.R
+import com.example.food.activites.CategoryMealsActivity
+import com.example.food.activites.MainActivity
+import com.example.food.activites.MealActivity
+import com.example.food.adapters.CategoriesAdapter
+import com.example.food.databinding.FragmentCategoriesBinding
+import com.example.food.databinding.FragmentHomeBinding
+import com.example.food.fragments.HomeFragment.Companion.CATEGORY_NAME
+import com.example.food.pojo.MealsByCategory
+import com.example.food.viewModel.CategoriesViewModel
+import com.example.food.viewModel.HomeViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CategoriesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CategoriesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentCategoriesBinding
+    private lateinit var categoriesAdapter: CategoriesAdapter
+    private lateinit var viewModel: CategoriesViewModel
+
+
+
+    companion object {
+        const val MEAL_ID = "com.example.food.fragments.idMeal"
+        const val MEAL_NAME = "com.example.food.fragments.nameMeal"
+        const val MEAL_THUMB = "com.example.food.fragments.thumbMeal"
+        const val CATEGORY_NAME = "com.example.food.fragments.categoryName"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        viewModel = ViewModelProvider(this)[CategoriesViewModel::class.java]
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_categories, container, false)
+        binding = FragmentCategoriesBinding.inflate(inflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CategoriesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CategoriesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getCategories()
+        // viewModel.observeCategoriesLiveData()
+        preparRecyclerView()
+        obervew()
+        onCategoryClick()
+    }
+   /** private fun onPopularItemClick() {
+        CategoriesAdapter.={meal->
+            val intent=Intent(activity, MealActivity::class.java)
+            intent.putExtra(HomeFragment.MEAL_ID,meal.idMeal)
+            intent.putExtra(HomeFragment.MEAL_NAME,meal.strMeal)
+            intent.putExtra(HomeFragment.MEAL_THUMB,meal.strMealThumb)
+            startActivity(intent)
+        }
+    }**/
+
+    private fun obervew() {
+        viewModel.observeCategoriesLiveData().observe(viewLifecycleOwner, Observer { categories ->
+            categoriesAdapter.setCategoryList(categories)
+        })
+    }
+
+    private fun preparRecyclerView() {
+        categoriesAdapter = CategoriesAdapter()
+        binding.rvCategories.apply {
+            layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+            adapter = categoriesAdapter
+        }
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onItemClick = { category ->
+            val intent = Intent(activity, CategoryMealsActivity::class.java)
+            intent.putExtra(CategoriesFragment.CATEGORY_NAME, category.strCategory)
+            startActivity(intent)
+
+        }
+
+
     }
 }

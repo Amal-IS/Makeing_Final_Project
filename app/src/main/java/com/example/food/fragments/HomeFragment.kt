@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,42 +63,13 @@ companion object{
         homeMvvm.getPopularItems()
         observePopularItemsLiveData()
         onPopularItemClick()
-
-        prepareCategoriesRecyclerView()
         homeMvvm.getCategories()
-        observeCategoriesLiveData()
-        onCategoryClick()
-
-
 
 
 
     }
 
-    private fun onCategoryClick() {
-        categoriesAdapter.onItemClick={category ->
-          val intent=Intent(activity,CategoryMealsActivity::class.java)
-            intent.putExtra(CATEGORY_NAME,category.strCategory)
-            startActivity(intent)
 
-        }
-    }
-
-    private fun prepareCategoriesRecyclerView() {
-        categoriesAdapter= CategoriesAdapter()
-        binding.recViewCategories.apply {
-            layoutManager=GridLayoutManager(context,3,GridLayoutManager.VERTICAL,false)
-         adapter=categoriesAdapter
-        }
-    }
-
-    private fun observeCategoriesLiveData() {
-        homeMvvm.observeCategoriesLiveData().observe(viewLifecycleOwner, Observer {categories->
-        categoriesAdapter.setCategoryList(categories)
-
-
-        })
-    }
 
     private fun onPopularItemClick() {
       popularItemsAdapter.onItemClick={meal->
@@ -111,7 +83,7 @@ companion object{
 
     private fun preparePopularItemsRecyclerView() {
       binding.recViewMealsPopular.apply {
-          layoutManager=LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+          layoutManager=GridLayoutManager(activity,3,GridLayoutManager.VERTICAL,false)
           adapter=popularItemsAdapter
       }
     }

@@ -1,7 +1,6 @@
 package com.example.food.pojo
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+
 
 
 data class Meal(

@@ -82,7 +82,7 @@ class MealActivity : AppCompatActivity() {
     }
     private fun loadingCase(){
         binding.progressBar.visibility=View.VISIBLE
-        binding.btnAddToFav.visibility= View.INVISIBLE
+        //binding.btnAddToFav.visibility= View.INVISIBLE
         binding.tvInstructions.visibility=View.INVISIBLE
         binding.tvCategory.visibility=View.INVISIBLE
         binding.tvArea.visibility=View.INVISIBLE
@@ -91,7 +91,7 @@ class MealActivity : AppCompatActivity() {
     }
     private fun onResponseCase(){
         binding.progressBar.visibility=View.INVISIBLE
-        binding.btnAddToFav.visibility= View.VISIBLE
+       // binding.btnAddToFav.visibility= View.VISIBLE
         binding.tvInstructions.visibility=View.VISIBLE
         binding.tvCategory.visibility=View.VISIBLE
         binding.tvArea.visibility=View.VISIBLE

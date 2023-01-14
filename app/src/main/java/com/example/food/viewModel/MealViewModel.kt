@@ -12,6 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MealViewModel() :ViewModel(){
+
    private var mealDetailsLiveData=MutableLiveData<Meal>()
 
 

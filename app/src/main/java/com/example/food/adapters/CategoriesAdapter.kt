@@ -7,9 +7,10 @@ import com.bumptech.glide.Glide
 import com.example.food.databinding.CategoryItemBinding
 import com.example.food.databinding.PopularItemsBinding
 import com.example.food.pojo.Category
+import com.example.food.pojo.MealsByCategory
 
 class CategoriesAdapter():RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder> (){
-
+    lateinit var onItemClickMeals:((MealsByCategory)->Unit)
     private var categoriesList=ArrayList<Category>()
     var onItemClick:((Category)->Unit)?=null
 
@@ -35,6 +36,7 @@ class CategoriesAdapter():RecyclerView.Adapter<CategoriesAdapter.CategoryViewHol
    holder.itemView.setOnClickListener{
       onItemClick!!.invoke(categoriesList[position])
    }
+
 
     }
 
